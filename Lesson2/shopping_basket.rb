@@ -26,4 +26,3 @@ basket.each do |name, data|
    end   
 end
 puts "Итого: #{final_summa}"
-  
