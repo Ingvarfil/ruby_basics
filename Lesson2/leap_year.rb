@@ -11,7 +11,7 @@ unless number >= 1 && number <= months_day[month]
   exit
 end
 
-def Time.leap?(year)
+def leap?(year)
   if year % 400 == 0 || year % 4 == 0
     true
   else
@@ -23,7 +23,7 @@ puts 'Введите год'
 year = gets.chomp.to_i
 
 if year > 1 && year < 3000
-  leap = Time.leap?(year)
+  leap = leap?(year)
 else
   puts 'Введите корректный год)'
 end
