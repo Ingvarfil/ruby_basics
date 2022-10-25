@@ -8,28 +8,23 @@
 =end
 
 class Station
-  attr_reader :train_on_station, :station_name
+  attr_reader :station, :name, :trains
 
-  def initialize(station_name)
-     @station_name = station_name
-     @train_on_station = []
+  def initialize(name)
+     @name = name
+     @trains = []
   end
 
-  def take_train(train)
-    @train_on_station.push(train)
+  def add_train(train)
+    @trains.push(train)
   end
 
-  def send_trainsend_train(train)
-    @train_on_station.delete(train)
+  def send_train(train)
+    @trains.delete(train)
   end
 
-  def get_list_trains_on_station_type(type)
-    puts "Станция #{station_name}. Поезда типа #{type}:"
-    @train_on_station.each do |train|
-       if train.type_train == type
-         puts train.number_train
-       end
-    end
+  def get_list_trains(type)
+    @trains.select {|train| train.number if train.type == type}
   end 
-
+  
 end

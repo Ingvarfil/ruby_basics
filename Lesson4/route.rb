@@ -7,27 +7,21 @@
 
 
 class Route
-  attr_reader :start_station, :end_station, :intermediate_station, :rout_list
+  attr_reader :start_station, :end_station, :route_name
 
-  def initialize(start_station, end_station)
+  def initialize(start_station, end_station, name)
     @start_station = start_station
     @end_station = end_station
-    @intermediate_station = []
-    @rout_list = []
-
+    @stations = [@start_station, @end_station]
+    @route_name = name
   end
 
-  def add_intermediate_station(station)
-    @intermediate_station.push(station)
+  def add_station(station)
+    @stations.insert(-2, station)
   end
 
-  def delete_intermediate_station(station)
-    @intermediate_station.delete(station)
-  end
-
-  def get_rout_list
-    @rout_list = [@start_station, @intermediate_station, @end_station].flatten
-    #rout.each  {|item| puts "#{item}"}
+  def delete_station(station)
+    @stations.delete(station)
   end
 
 end

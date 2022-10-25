@@ -12,66 +12,70 @@
 =end
 
 class Train
-  attr_accessor :speed
-  attr_reader :number_wagons, :type_train, :current_station, :previous_station, :next_station
+  attr_reader :number, :speed, :wagons, :type, :current_station, :previous_station, :next_station
 
-
-  def initialize(number_train, type_train, number_wagons = 0)
-    @number_train = number_train
-    @type_train = type_train
-    @number_wagons = number_wagons
+  def initialize(number, type, wagons = 0)
+    @number = number
+    @type = type
+    @wagons = wagons
     @speed = 0
-
   end
 
   def pick_up_speed(value)
-    self.speed = value
+    @speed += value
   end
     
   def stop
-    self.speed = 0
+    @speed = 0
   end
 
   def hitch_wagon
-    if self.speed.zero?
-      @number_wagons +=1
+    if @speed.zero?
+      wagons +=1
     end
   end
 
   def unhitch_wagon
-    if self.speed.zero? && @number_wagons != 0
-      @number_wagons -=1
+    if @speed.zero? && @wagons != 0
+      @wagons -=1
     end
   end
 
-  def rout_train(rout)
+  def rout(rout)
     @rout = rout
-    @index = 0
-    @current_station = rout.get_rout_list[@index]
-    station.take_train(self)
-   
-
+    @current_station = @rout.stations.first
+    @current_station.add_station(self)
   end
 
-  def forward_movement
-   if @current_station == rout.get_rout_list.last
-     puts "Поезд находится на конечной станции маршрута"      
-     else
-      @index += 1
-      station.send_train(self)
-      @current_station[@index]
-      station.take_train(self)
+  def current_station
+    @rout.stations.each {|station| station.trains.include?(self)}
+  end
+
+  def previous_station
+    @rout.stations[@rout.stations.index(@current_station) - 1]
+  end
+
+  def next_station
+    @rout.stations[@rout.stations.index(@current_station) + 1]
+  end
+
+  def move_forvard
+    if @current_station == rout.last
+      puts "Поезд находится на конечной станции маршрута"
+    else
+      @current_station.send_train(self)
+      @current_station = next_station
+      @current_station.add_train(self)
     end
   end
 
-  def backward_movement
-    if @current_station == rout.get_rout_list.first
+  def move_backward
+    if @current_station == rout.first
       puts "Поезд находится на начальной станции маршрута"
-     else 
-      @index -= 1
+    else
       @current_station.send_train(self)
-      @current_station[@index]
-      @current_station.take_train(self)
+      @current_station = previous_station
+      @current_station.add_train(self)
     end
   end
 
