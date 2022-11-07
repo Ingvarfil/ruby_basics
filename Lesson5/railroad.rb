@@ -135,28 +135,67 @@ def create_station
   name_station = STDIN.gets.chomp.capitalize
   station = Station.new(name_station)
   @stations << station
+  puts "Станция #{station.name} создана"
+  @stations.each do |station| 
+    puts ""
 end
 
 def create_route
 
   puts 'Создаем первую станцию маршрута:'
-  @start_station = create_station
-
+  first = create_station
   puts 'Введите конечную станцию маршрута:'
-  @end_station = create_station
-  @route_name = "#{@start_station} - #{@end_station}"
+  last = create_station
 
-  @route_new = Route.new(@route_name, @start_station, @end_station)
-  @routes << @route_new
+  first = @stations.select { |station| first == station.name }
+  last = @stations.select { |station| last == station.name }
 
+  @routes << Route.new(first[0], last[0])
 
-  puts "Маршрут #{@route_new.route_name} создан"
+  #puts "Маршрут #{@route_new.route_name} создан"
+  puts  @routes
 
-#Посмотреть что тут есть
-  @routes.each {|rout| puts "#{rout.route_name}"}
-  puts @stations
- 
+ #Посмотреть что тут есть
+  @routes.each do |route|
+    puts "Маршрут #{route.route_name}: "
+    route.stations.map.with_index(1) do |station, index|
+      puts "Станция #{index}: #{station}. Поездов на станции: #{station}."
+    end
+  end  
+  
 end
 
+def show_routes
+  puts 'Не создано ни одного маршрута!' if @routes.empty?
+  @routes.each do |route|
+    puts "Маршрут #{route.route_name}: "
+    route.stations.map.with_index(1) do |station, index|
+      puts "Станция #{index}: #{station.name}. Поездов на станции: #{station.trains.size}."
+    end
+  end
+end
+
+def show_stations
+  puts 'Не создано ни одной станции!' if @stations.empty?
+  @stations.each do |station|
+    station.trains.each do |train|
+      puts "Станция #{station.name}. Поезда на станции:"
+      puts "Пассажирский поезд номер #{train.number}, вагонов в поезде #{train.wagon_info.size}." if train.type == 'пассажирский'
+      puts "Грузовой поезд номер #{train.number}, вагонов в поезде #{train.wagon_info.size}." if train.type == 'грузовой'
+    end
+  end
+end
+
+def show_trains
+  puts 'Не создано ни одного поезда!' if @trains.empty?
+  @trains.each &:info
+end
+
+def show_wagons
+  puts 'Не создано ни одного вагона!' if @wagons.empty?
+  @wagons.each do |wagon|
+    puts "Вагон номер #{wagon.number} прицеплен к поезду #{wagon.train}."
+  end
+end
   
 end

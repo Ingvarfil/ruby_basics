@@ -12,13 +12,14 @@
 =end
 
 class Train
-  attr_reader :number, :speed, :wagons, :type, :current_station, :previous_station, :next_station
+  attr_reader :number, :speed, :wagons, :type, :current_station, :previous_station, :next_station, :rout
 
   def initialize(number, type, wagons = 0)
     @number = number
     @type = type
     @wagons = []
     @speed = 0
+    @rout = nil
   end
 
   def pick_up_speed(value)
@@ -53,10 +54,10 @@ class Train
     end
   end
 
-  def rout(rout)
-    @rout = rout
+  def rout(route)
+    @rout = route
     @current_station = @rout.stations.first
-    @current_station.add_station(self)
+    @current_station.add_train(self)
   end
 
   def current_station
@@ -71,7 +72,7 @@ class Train
     @rout.stations[@rout.stations.index(@current_station) + 1]
   end
 
-  def move_forvard
+  def forward
     if @current_station == rout.last
       puts "Поезд находится на конечной станции маршрута"
     else
@@ -81,7 +82,7 @@ class Train
     end
   end
 
-  def move_backward
+  def backward
     if @current_station == rout.first
       puts "Поезд находится на начальной станции маршрута"
     else
