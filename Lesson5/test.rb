@@ -6,52 +6,15 @@ require_relative 'train_pass.rb'
 require_relative 'wagon.rb'
 require_relative 'wagon_pass.rb'
 require_relative 'wagon_cargo.rb'
-
-
+require_relative 'data_in.rb'
 
 @stations = []
 @trains = []
 @routes = []
 @wagons = []
 
-def data_in
-  @stations << Station.new("Klin")
-  @stations << Station.new("Boloto")
-  @stations << Station.new("Depo")
-  @stations << Station.new("Piter")
-  @stations << Station.new("Bologoe")
-  @stations << Station.new("Jopa")
-  @stations << Station.new("Lublino")
-  @stations << Station.new("Butovo")
+data_in
 
-  @routes << Route.new("Klin-Boloto", Station.new("Klin"), Station.new("Boloto"))
-  @routes << Route.new("Depo-Piter", Station.new("Depo"), Station.new("Piter"))
-  r1 = Route.new("Lublino-Klin", Station.new("Lublino"), Station.new("Klin"))
-
-  @trains << PassengerTrain.new(11)
-  @trains << PassengerTrain.new(23)
-  @trains << PassengerTrain.new(48)
-
-  @trains << CargoTrain.new(102)
-  @trains << CargoTrain.new(354)
-  @trains << CargoTrain.new(342)
-  @trains << CargoTrain.new(952)
-
-  @wagons << WagonPass.new(1)
-  @wagons << WagonPass.new(2)
-  @wagons << WagonPass.new(3)
-  @wagons << WagonPass.new(4)
-
-  @wagons << WagonCargo.new(21)
-  @wagons << WagonCargo.new(22)
-  @wagons << WagonCargo.new(20)
-  @wagons << WagonCargo.new(18)
-  @wagons << WagonCargo.new(11)
-  
-end
-
-
-  
   # ========== Start Пользовательский интерфейс ==================
   def main_menu
     loop do
@@ -330,28 +293,16 @@ end
 def move_forward
   puts 'Введите номер поезда:'
   t = select_train
-  t[0].forward
-  t[0].info_menu
+  t.rout.stations.forward
+ 
 end
 
 def move_backward
   puts 'Введите номер поезда:'
   t = select_train
-  t[0].backward
-  t[0].info_menu
-end
-
-def show_trains
-
+  t.rout.stations.backward
 
 end
 
-def show_wagons
-  puts 'Не создано ни одного вагона!' if @wagons.empty?
-  @wagons.each do |wagon|
-    puts "Вагон номер #{wagon.number} прицеплен к поезду #{wagon.train}."
-  end
-
-end
   
 
