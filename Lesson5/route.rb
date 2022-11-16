@@ -7,12 +7,12 @@
 
 
 class Route
-  attr_reader :start_station, :end_station, :route_name, :stations
+  attr_reader :start_station, :end_station, :route_name, :route
 
   def initialize(route_name, start_station, end_station)
     @start_station = start_station
     @end_station = end_station
-    @stations = [@start_station, @end_station]
+    @route = [@start_station, @end_station]
     @route_name = route_name  
   end
 

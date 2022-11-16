@@ -12,14 +12,14 @@
 =end
 
 class Train
-  attr_reader :number, :speed, :wagons, :type, :current_station, :previous_station, :next_station, :rout
+  attr_reader :number, :speed, :wagons, :type, :current_station, :previous_station, :next_station, :train_route
 
   def initialize(number, type, wagons = 0)
     @number = number
     @type = type
     @wagons = []
     @speed = 0
-    @rout = nil
+    @train_route = nil
   end
 
   def pick_up_speed(value)
@@ -54,26 +54,26 @@ class Train
     end
   end
 
-  def rout(route)
-    @rout = route
-    @current_station = @rout.stations.first
+  def assign_route(route)
+    @train_route = route
+    @current_station = @train_route.route.first
     @current_station.add_train(self)
   end
 
   def current_station
-    @rout.stations.each {|station| station.trains.include?(self)}
+    @train_route.route.each {|station| station.trains.include?(self)}
   end
 
   def previous_station
-    @rout.stations[@rout.stations.index(@current_station) - 1]
+    @train_route.route[@train_route.route.index(@current_station) - 1]
   end
 
   def next_station
-    @rout.stations[@rout.stations.index(@current_station) + 1]
+    @train_route.route[@train_route.route.index(@current_station) + 1]
   end
 
   def forward
-    if @current_station == rout.last
+    if @train_route.route.size == ((@train_route.route.index(@current_station)) + 1)
       puts "Поезд находится на конечной станции маршрута"
     else
       @current_station.send_train(self)
@@ -83,7 +83,7 @@ class Train
   end
 
   def backward
-    if @current_station == rout.first
+    if @train_route.route.index(@current_station) == 0
       puts "Поезд находится на начальной станции маршрута"
     else
       @current_station.send_train(self)

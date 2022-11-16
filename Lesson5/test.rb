@@ -8,10 +8,10 @@ require_relative 'wagon_pass.rb'
 require_relative 'wagon_cargo.rb'
 require_relative 'data_in.rb'
 
-@stations = []
-@trains = []
-@routes = []
-@wagons = []
+@ar_stations = []
+@ar_trains = []
+@ar_routes = []
+@ar_wagons = []
 
 data_in
 
@@ -66,22 +66,13 @@ data_in
 
   def info_menu
     puts 'Для получения информации введите:'
-    puts '1 - маршруты;'
-    puts '2 - поезда;'
-    puts '3 - вагоны;'
-    puts '4 - станции;'
+    puts '1 - маршруты и поезда на станции;'
     puts '0 - вернуться в основное меню.'
     info_input = gets.to_i
 
     case info_input
     when 1
       show_routes
-    when 2
-      show_trains
-    when 3
-      show_wagons
-    when 4
-      show_stations
     when 0
       main_menu
     end
@@ -132,10 +123,10 @@ def create_station
   name_station = STDIN.gets.chomp.capitalize 
   station = Station.new(name_station)
 
-  if @stations.find { |station| name_station == station.name }
+  if @ar_stations.find { |station| name_station == station.name }
     puts "Станция #{station.name} существует"
   else
-    @stations << station
+    @ar_stations << station
     puts "Станция #{station.name} создана"
   end
   station
@@ -151,7 +142,7 @@ def create_route
 
   route_name = "#{start_station.name}-#{end_station.name}"
   route = Route.new(route_name, start_station, end_station)
-  @routes << route
+  @ar_routes << route
   puts "Создан маршрут #{route.route_name}"
 
 end
@@ -159,7 +150,7 @@ end
 def add_stations
   puts "Введите название маршрута:"
   name_route_in = STDIN.gets.chomp
-  route_x = @routes.find { |route| name_route_in == route.route_name}
+  route_x = @ar_routes.find { |route| name_route_in == route.route_name}
 
   station_add = create_station
   route_x.add_station(station_add)
@@ -170,7 +161,7 @@ end
 def delete_stations
   puts "Введите название маршрута:"
   name_route_in = STDIN.gets.chomp
-  route_x = @routes.find { |route| name_route_in == route.route_name}
+  route_x = @ar_routes.find { |route| name_route_in == route.route_name}
 
   puts 'Введите название станции:'
   station_in = STDIN.gets.chomp.capitalize
@@ -183,8 +174,8 @@ end
 
 def select_route
   name_route_in = STDIN.gets.chomp
-  if @routes.find { |route| name_route_in == route.route_name}
-    route_x = @routes.find { |route| name_route_in == route.route_name}  
+  if @ar_routes.find { |route| name_route_in == route.route_name}
+    route_x = @ar_routes.find { |route| name_route_in == route.route_name}  
   else
     puts "Такого маршрута нет"
   end
@@ -199,10 +190,10 @@ def create_train
   type = STDIN.gets.to_i
 
   if type == 1
-    @trains << PassengerTrain.new(number)
+    @ar_trains << PassengerTrain.new(number)
     puts "Пассажирский поезд номер #{number} создан."
   elsif type == 2
-    @trains << CargoTrain.new(number)
+    @ar_trains << CargoTrain.new(number)
     puts "Товарный поезд номер #{number} создан."
   else
     puts 'Введите корректный тип поезда (1 - пассажирский, 2 - товарный):'
@@ -217,10 +208,10 @@ def create_wagon
   type = STDIN.gets.to_i
 
   if type == 1
-    @wagons << WagonPass.new(number)
+    @ar_wagons << WagonPass.new(number)
     puts "Пассажирский вагон номер #{number} создан."
   elsif type == 2
-    @wagons << WagonCargo.new(number)
+    @ar_wagons << WagonCargo.new(number)
     puts "Товарный вагон номер #{number} создан."
   else
     puts 'Введите корректный тип вагона (1 - пассажирский, 2 - товарный).'
@@ -230,12 +221,12 @@ end
 
 def select_train
   number = gets.to_i
-  @trains.each.select { |train| number == train.number }
+  @ar_trains.each.select { |train| number == train.number }
 end
 
 def select_wagon
   number = gets.to_i
-  @wagons.each.select { |wagon| number == wagon.number }
+  @ar_wagons.each.select { |wagon| number == wagon.number }
 end
 
 def add_wagons
@@ -263,44 +254,34 @@ def train_route
   rout_x = select_route
   puts 'Введите номер поезда:'
   train_x = select_train
-  train_x[0].rout(rout_x)
+  train_x[0].assign_route(rout_x)
  
-end
-
-def show_routes
-  puts 'Не создано ни одного маршрута!' if @routes.empty?
-  @routes.each do |route|
-    puts "Маршрут #{route.route_name}: "
-    route.stations.map.with_index(1) do |station, index|
-      puts "Станция #{index}: #{station.name}. Поездов на станции: #{station.trains.size}."
-    end
-  end
-
-end
-
-def show_stations
-  puts 'Не создано ни одной станции!' if @stations.empty?
-  @stations.each do |station|
-    station.trains.each do |train|
-      puts "Станция #{station.name}. Поезда на станции:"
-      puts "Пассажирский поезд номер #{train.number}" if train.type == 'пассажирский'
-      puts "Товарный поезд номер #{train.number}" if train.type == 'товарный'
-    end
-  end
-
 end
 
 def move_forward
   puts 'Введите номер поезда:'
-  t = select_train
-  t.rout.stations.forward
+  train_x = select_train
+  train_x[0].forward
  
 end
 
 def move_backward
   puts 'Введите номер поезда:'
-  t = select_train
-  t.rout.stations.backward
+  train_x = select_train
+  train_x[0].backward
+
+end
+
+def show_routes
+  puts 'Не создано ни одного маршрута!' if @ar_routes.empty?
+  @ar_routes.each do |route|
+    puts "Маршрут #{route.route_name}: "
+    route.route.map.with_index(1) do |station, index|
+      puts "Станция #{index}: #{station.name}. Поездов на станции: #{station.trains.size}."
+    end
+  end
+
+end
 
 end
 
