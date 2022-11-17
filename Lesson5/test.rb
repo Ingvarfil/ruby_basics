@@ -36,8 +36,7 @@ data_in
       when 0
         break
       end
-    end
-  
+    end  
   end
   
   def create_menu
@@ -48,7 +47,6 @@ data_in
     puts '4 - вагон;'
     puts '0 - вернуться в основное меню'
     create_input = gets.chomp.to_i
-
     case create_input
     when 1
       create_station
@@ -61,7 +59,6 @@ data_in
     when 0
       main_menu
     end
-
   end
 
   def info_menu
@@ -69,7 +66,6 @@ data_in
     puts '1 - маршруты и поезда на станции;'
     puts '0 - вернуться в основное меню.'
     info_input = gets.to_i
-
     case info_input
     when 1
       show_routes
@@ -77,7 +73,6 @@ data_in
       main_menu
     end
   end
-
   def change_menu
     puts 'Выберите действия:'
     puts '1 - добавить станцию к маршруту;'
@@ -90,9 +85,7 @@ data_in
     puts '8 - увеличиить скорость поезда;'
     puts '9 - остановить поезд;'
     puts '0 - вернуться в основное меню.'
-
     change_input = gets.to_i
-
     case change_input
     when 1
       add_station
@@ -122,7 +115,6 @@ def create_station
   puts 'Введите название станции:'
   name_station = STDIN.gets.chomp.capitalize 
   station = Station.new(name_station)
-
   if @ar_stations.find { |station| name_station == station.name }
     puts "Станция #{station.name} существует"
   else
@@ -130,46 +122,37 @@ def create_station
     puts "Станция #{station.name} создана"
   end
   station
-
 end
 
 def create_route
   puts "Создаем первую станцию маршрута"
-  start_station = create_station
-  
+  start_station = create_station  
   puts "Создаем последнюю станцию маршрута"
   end_station = create_station
-
   route_name = "#{start_station.name}-#{end_station.name}"
   route = Route.new(route_name, start_station, end_station)
   @ar_routes << route
   puts "Создан маршрут #{route.route_name}"
-
 end
 
 def add_stations
   puts "Введите название маршрута:"
   name_route_in = STDIN.gets.chomp
   route_x = @ar_routes.find { |route| name_route_in == route.route_name}
-
   station_add = create_station
   route_x.add_station(station_add)
-  puts "Станция #{station_add.name} добавлена в маршрут #{route_x.route_name}."
-  
+  puts "Станция #{station_add.name} добавлена в маршрут #{route_x.route_name}."  
 end
 
 def delete_stations
   puts "Введите название маршрута:"
   name_route_in = STDIN.gets.chomp
   route_x = @ar_routes.find { |route| name_route_in == route.route_name}
-
   puts 'Введите название станции:'
   station_in = STDIN.gets.chomp.capitalize
   station_del = route_x.route.find {|station| station_in == station.name}
-
   route_x.delete_station(station_del)
-  puts "Станция #{station_in} удалена из маршрута #{route_x.route_name}."
-  
+  puts "Станция #{station_in} удалена из маршрута #{route_x.route_name}."  
 end
 
 def select_route
@@ -179,16 +162,13 @@ def select_route
   else
     puts "Такого маршрута нет"
   end
-
 end
 
 def create_train
   puts 'Введите номер поезда: '
   number = gets.to_i
-
   puts 'Введите тип поезда (1 - пассажирский, 2 - товарный):'
   type = STDIN.gets.to_i
-
   if type == 1
     @ar_trains << PassengerTrain.new(number)
     puts "Пассажирский поезд номер #{number} создан."
@@ -203,10 +183,8 @@ end
 def create_wagon
   puts 'Введите номер вагона: '
   number = gets.to_i
-
   puts 'Введите тип вагона (1 - пассажирский, 2 - товарный):'
   type = STDIN.gets.to_i
-
   if type == 1
     @ar_wagons << WagonPass.new(number)
     puts "Пассажирский вагон номер #{number} создан."
@@ -232,20 +210,16 @@ end
 def add_wagons
   puts 'Введите номер поезда:'
   train_x = select_train
-
   puts 'Введите номер вагона:'
   wagon_x = select_wagon
-
   train_x[0].hitch_wagon(wagon_x[0])
 end
 
 def delete_wagons
   puts 'Введите номер поезда:'
   train_x = select_train
-
   puts 'Введите номер вагона:'
   wagon_x = select_wagon
-
   train_x[0].unhitch_wagon(wagon_x[0])
 end
 
@@ -255,21 +229,18 @@ def train_route
   puts 'Введите номер поезда:'
   train_x = select_train
   train_x[0].assign_route(rout_x)
- 
 end
 
 def move_forward
   puts 'Введите номер поезда:'
   train_x = select_train
   train_x[0].forward
- 
 end
 
 def move_backward
   puts 'Введите номер поезда:'
   train_x = select_train
   train_x[0].backward
-
 end
 
 def show_routes
@@ -280,9 +251,7 @@ def show_routes
       puts "Станция #{index}: #{station.name}. Поездов на станции: #{station.trains.size}."
     end
   end
-
 end
-
 end
 
   

@@ -41,7 +41,6 @@ class Train
     else
       puts "Остановите поезд, прежде чем прицеплять вагоны!"
     end
-
   end
 
 # Отцепить вагоны, если поезд стоит.
@@ -91,5 +90,4 @@ class Train
       @current_station.add_train(self)
     end
   end
-
 end
