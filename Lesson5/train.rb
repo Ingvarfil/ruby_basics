@@ -53,26 +53,26 @@ class Train
     end
   end
 
-  def assign_route(route)
-    @train_route = route
-    @current_station = @train_route.route.first
+  def assign_route(stations)
+    @train_route = stations
+    @current_station = @train_route.stations.first
     @current_station.add_train(self)
   end
 
   def current_station
-    @train_route.route.each {|station| station.trains.include?(self)}
+    @train_route.stations.each {|station| station.trains.include?(self)}
   end
 
   def previous_station
-    @train_route.route[@train_route.route.index(@current_station) - 1]
+    @train_route.stations[@train_route.stations.index(@current_station) - 1]
   end
 
   def next_station
-    @train_route.route[@train_route.route.index(@current_station) + 1]
+    @train_route.stations[@train_route.stations.index(@current_station) + 1]
   end
 
   def forward
-    if @train_route.route.size == ((@train_route.route.index(@current_station)) + 1)
+    if @train_route.stations.size == ((@train_route.stations.index(@current_station)) + 1)
       puts "Поезд находится на конечной станции маршрута"
     else
       @current_station.send_train(self)
@@ -82,7 +82,7 @@ class Train
   end
 
   def backward
-    if @train_route.route.index(@current_station) == 0
+    if @train_route.stations.index(@current_station) == 0
       puts "Поезд находится на начальной станции маршрута"
     else
       @current_station.send_train(self)

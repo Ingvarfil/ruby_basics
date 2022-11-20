@@ -73,6 +73,7 @@ data_in
       main_menu
     end
   end
+
   def change_menu
     puts 'Выберите действия:'
     puts '1 - добавить станцию к маршруту;'
@@ -101,10 +102,6 @@ data_in
       add_wagons
     when 7
       delete_wagons
-    when 8
-      increase_speed
-    when 9
-      stop_train
     when 0
       main_menu
     end
@@ -197,14 +194,37 @@ def create_wagon
   end
 end
 
+def select_train1
+  number = gets.to_i
+  if @ar_trains.each.select { |train| number == train.number }.none?
+    puts "Такого поезда нет. Создайте поезд."
+    create_train
+  else
+    @ar_trains.each.select { |train| number == train.number }
+  end
+end
+
 def select_train
   number = gets.to_i
-  @ar_trains.each.select { |train| number == train.number }
+  train_x = @ar_trains.each.select { |train| number == train.number }
+  if train_x.none?
+    puts "Такого поезда нет. Создайте поезд."
+    create_train
+  else
+    train_x
+  end
 end
+
 
 def select_wagon
   number = gets.to_i
-  @ar_wagons.each.select { |wagon| number == wagon.number }
+  wagon_x = @ar_wagons.each.select { |wagon| number == wagon.number }
+  if wagon_x.none?
+    puts "Такого вагона нет. Создайте вагон"
+    create_wagon
+  else
+    wagon_x  
+  end
 end
 
 def add_wagons
@@ -247,12 +267,12 @@ def show_routes
   puts 'Не создано ни одного маршрута!' if @ar_routes.empty?
   @ar_routes.each do |route|
     puts "Маршрут #{route.route_name}: "
-    route.route.map.with_index(1) do |station, index|
+    route.stations.map.with_index(1) do |station, index|
       puts "Станция #{index}: #{station.name}. Поездов на станции: #{station.trains.size}."
     end
   end
 end
-end
+
 
   
 

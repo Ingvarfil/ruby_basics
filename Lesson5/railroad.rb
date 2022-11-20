@@ -197,12 +197,24 @@ end
 
 def select_train
   number = gets.to_i
-  @ar_trains.each.select { |train| number == train.number }
+  train_x = @ar_trains.each.select { |train| number == train.number }
+  if train_x.none?
+    puts "Такого поезда нет. Создайте поезд."
+    create_train
+  else
+    train_x
+  end
 end
 
 def select_wagon
   number = gets.to_i
-  @ar_wagons.each.select { |wagon| number == wagon.number }
+  wagon_x = @ar_wagons.each.select { |wagon| number == wagon.number }
+  if wagon_x.none?
+    puts "Такого вагона нет. Создайте вагон"
+    create_wagon
+  else
+    wagon_x  
+  end
 end
 
 def add_wagons
@@ -244,7 +256,7 @@ def show_routes
   puts 'Не создано ни одного маршрута!' if @ar_routes.empty?
   @ar_routes.each do |route|
     puts "Маршрут #{route.route_name}: "
-    route.route.map.with_index(1) do |station, index|
+    route.stations.map.with_index(1) do |station, index|
       puts "Станция #{index}: #{station.name}. Поездов на станции: #{station.trains.size}."
     end
   end
