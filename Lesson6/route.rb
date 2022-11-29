@@ -1,19 +1,16 @@
-=begin
-Имеет начальную и конечную станцию, а также список промежуточных станций. Начальная и конечная станции указываются при создании маршрута, а промежуточные могут добавляться между ними.
-Может добавлять промежуточную станцию в список
-Может удалять промежуточную станцию из списка
-Может выводить список всех станций по-порядку от начальной до конечной
-=end
-
+require_relative 'instanc_counter.rb'
 
 class Route
+  include InstanceCounter
+
   attr_reader :start_station, :end_station, :route_name, :stations
 
   def initialize(route_name, start_station, end_station)
     @start_station = start_station
     @end_station = end_station
     @stations = [@start_station, @end_station]
-    @route_name = route_name  
+    @route_name = route_name
+    register_instance
   end
 
   def add_station(station)

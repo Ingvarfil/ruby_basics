@@ -1,20 +1,16 @@
-=begin
-Имеет номер (произвольная строка) и тип (грузовой, пассажирский) и количество вагонов, эти данные указываются при создании экземпляра класса
-Может набирать скорость
-Может возвращать текущую скорость
-Может тормозить (сбрасывать скорость до нуля)
-Может возвращать количество вагонов
-Может прицеплять/отцеплять вагоны (по одному вагону за операцию, метод просто увеличивает или уменьшает количество вагонов). Прицепка/отцепка вагонов может осуществляться только если поезд не движется.
-Может принимать маршрут следования (объект класса Route). 
-При назначении маршрута поезду, поезд автоматически помещается на первую станцию в маршруте.
-Может перемещаться между станциями, указанными в маршруте. Перемещение возможно вперед и назад, но только на 1 станцию за раз.
-Возвращать предыдущую станцию, текущую, следующую, на основе маршрута
-=end
 require_relative 'manufacturer.rb'
+require_relative 'instanc_counter.rb'
 
 class Train
   include Manufacturer
+  include InstanceCounter
   attr_reader :number, :speed, :wagons, :type, :current_station, :previous_station, :next_station, :train_route
+
+  @@trains_all = []
+
+  def self.find(number_in)
+    train_find = @@trains_all.find { |train| train.number == number_in }
+  end
 
   def initialize(number, type, wagons = 0)
     @number = number
@@ -22,6 +18,8 @@ class Train
     @wagons = []
     @speed = 0
     @train_route = nil
+    @@trains_all << self
+    register_instance
   end
 
   def pick_up_speed(value)
