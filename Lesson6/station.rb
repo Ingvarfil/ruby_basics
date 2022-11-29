@@ -27,6 +27,5 @@ class Station
 
   def get_list_trains(type)
     @trains.select {|train| train.number if train.type == type}
-  end 
-  
+  end   
 end

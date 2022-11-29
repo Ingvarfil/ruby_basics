@@ -20,5 +20,4 @@ class Route
   def delete_station(station)
     @stations.delete(station)
   end
-
 end
