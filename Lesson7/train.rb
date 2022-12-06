@@ -1,12 +1,16 @@
 require_relative 'manufacturer.rb'
 require_relative 'instanc_counter.rb'
+require_relative 'validation.rb'
 
 class Train
   include Manufacturer
   include InstanceCounter
+  include Validation
+
   attr_reader :number, :speed, :wagons, :type, :current_station, :previous_station, :next_station, :train_route
 
   @@trains_all = []
+  TRAIN_NUMBER_FORMAT = /[a-zа-я0-9]{3}(-?)[a-zа-я0-9]{2}/i
 
   def self.find(number_in)
     train_find = @@trains_all.find { |train| train.number == number_in }
@@ -20,6 +24,7 @@ class Train
     @train_route = nil
     @@trains_all << self
     register_instance
+    validate!
   end
 
   def pick_up_speed(value)
@@ -30,7 +35,6 @@ class Train
     @speed = 0
   end
 
-# Прицепить вагоны, если поезд стоит. Тип поезда и тип вагона должны совпадать
   def hitch_wagon(wagon)
     if @speed.zero?
       if self.type == wagon.type
@@ -43,7 +47,6 @@ class Train
     end
   end
 
-# Отцепить вагоны, если поезд стоит.
   def unhitch_wagon(wagon)
     if @speed.zero?
       @wagons.delete(wagon)
@@ -89,5 +92,12 @@ class Train
       @current_station = previous_station
       @current_station.add_train(self)
     end
+  end
+
+  protected
+
+  def validate!
+    raise "Номер не может быть пустым" if number.nil?
+    raise "Неправильный формат. Формат номера поезда ХХХ-ХХ, Х- любая буква или цифра, '-' необязательно." if number !~ TRAIN_NUMBER_FORMAT
   end
 end
