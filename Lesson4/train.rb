@@ -14,7 +14,7 @@
 class Train
   attr_reader :number, :speed, :wagons, :type, :current_station, :previous_station, :next_station
 
-  def initialize(number, type, wagons = 0)
+  def initialize(number, type)
     @number = number
     @type = type
     @wagons = wagons
