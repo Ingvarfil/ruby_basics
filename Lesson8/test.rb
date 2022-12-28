@@ -8,16 +8,13 @@ require_relative 'wagon_pass.rb'
 require_relative 'wagon_cargo.rb'
 require_relative 'data_in.rb'
 
-class RailRoad
-  attr_reader :route_name
+@ar_stations = []
+@ar_trains = []
+@ar_routes = []
+@ar_wagons = []
 
-  def initialize
-    @ar_stations = []
-    @ar_trains = []
-    @ar_routes = []
-    @ar_wagons = []
-  end
-  
+data_in
+
   # ========== Start Пользовательский интерфейс ==================
   def main_menu
     loop do
@@ -39,7 +36,7 @@ class RailRoad
       when 0
         break
       end
-    end
+    end  
   end
   
   def create_menu
@@ -86,6 +83,8 @@ class RailRoad
     puts '5 - переместить поезд на предыдущую станцию маршрута;'
     puts '6 - прицепить вагон к поезду;'
     puts '7 - отцепить вагон от поезда;'
+    puts '8 - увеличиить скорость поезда;'
+    puts '9 - остановить поезд;'
     puts '0 - вернуться в основное меню.'
     change_input = gets.to_i
     case change_input
@@ -98,7 +97,7 @@ class RailRoad
     when 4
       move_forward
     when 5
-      move_backward
+      move_back
     when 6
       add_wagons
     when 7
@@ -128,7 +127,7 @@ def create_route
   puts "Создаем последнюю станцию маршрута"
   end_station = create_station
   route_name = "#{start_station.name}-#{end_station.name}"
-  route = Route.new(route_name, start_station.name, end_station.name)
+  route = Route.new(route_name, start_station.name, end_station)
   @ar_routes << route
   puts "Создан маршрут #{route.route_name}"
 end
@@ -164,7 +163,7 @@ end
 
 def create_train
   puts 'Введите номер поезда: '
-  number = gets.to_i
+  number = STDIN.gets.chomp
   puts 'Введите тип поезда (1 - пассажирский, 2 - товарный):'
   type = STDIN.gets.to_i
   if type == 1
@@ -191,18 +190,39 @@ def create_wagon
     puts "Товарный вагон номер #{number} создан."
   else
     puts 'Введите корректный тип вагона (1 - пассажирский, 2 - товарный).'
-    create_wagon
+    create
+  end
+end
+
+def select_train1
+  number = gets.to_i
+  if @ar_trains.each.select { |train| number == train.number }.none?
+    puts "Такого поезда нет. Создайте поезд."
+    create_train
+  else
+    @ar_trains.each.select { |train| number == train.number }
   end
 end
 
 def select_train
-  number = gets.to_i
+  number = gets.chomp
   train_x = @ar_trains.find { |train| number == train.number }
   if train_x.nil?
     puts "Такого поезда нет. Создайте поезд."
     create_train
   else
     train_x
+  end
+end
+
+def list_wagon
+  train_x = select_train
+  if train_x.type == 'пассажирский'
+    train_x.train_wagons_info(train_x.wagons) { |wagon| puts "Номер вагона: #{wagon.number}, тип #{wagon.type}. Места: свободные #{wagon.empty_seats}, занятые #{wagon.occupied_seats}"}
+  elsif train_x.type == 'товарный'
+   train_wagons_info(train.wagons) { |wagon| puts "Номер вагона: #{wagon.number}, тип #{wagon.type}. Объем: свободный #{wagon.accessible_volume}, занятый #{wagon.occupied_volume}"}
+  else
+    puts "Тип поезда не определен"
   end
 end
 
@@ -222,7 +242,7 @@ def add_wagons
   train_x = select_train
   puts 'Введите номер вагона:'
   wagon_x = select_wagon
-  train_x[0].hitch_wagon(wagon_x[0])
+  train_x.hitch_wagon(wagon_x)
 end
 
 def delete_wagons
@@ -230,6 +250,7 @@ def delete_wagons
   train_x = select_train
   puts 'Введите номер вагона:'
   wagon_x = select_wagon
+  train_x[0].unhitch_wagon(wagon_x[0])
 end
 
 def train_route
@@ -237,19 +258,19 @@ def train_route
   rout_x = select_route
   puts 'Введите номер поезда:'
   train_x = select_train
-  train_x[0].assign_route(rout_x) 
+  train_x.assign_route(rout_x)
 end
 
 def move_forward
   puts 'Введите номер поезда:'
   train_x = select_train
-  train_x[0].forward 
+  train_x.forward
 end
 
 def move_backward
   puts 'Введите номер поезда:'
   train_x = select_train
-  train_x[0].backward
+  train_x.backward
 end
 
 def show_routes
@@ -257,8 +278,10 @@ def show_routes
   @ar_routes.each do |route|
     puts "Маршрут #{route.route_name}: "
     route.stations.each_with_index do |station, index|
-      puts "Станция #{index}: #{station.name}. Поездов на станции: #{station.trains.size}."
+      puts "Станция #{index}: #{station.name}: #{station.name}"
+      # route.stations.trains.each do | train |
+      #   puts "Поезд номер  #{trains.number}, тип #{trains.type}, количество вагонов #{trains.wagons.size} "
+      # end 
     end
   end
-end
 end

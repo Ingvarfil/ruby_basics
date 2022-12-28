@@ -21,6 +21,14 @@ class Station
      validate!
   end
 
+  def station_train_info(trains, &block)
+    if block_given?
+    trains.each { |train| yield(train) }
+    else
+      trains
+    end
+  end
+
   def add_train(train)
     @trains.push(train)
   end
@@ -36,7 +44,7 @@ class Station
   protected
 
   def validate!
-    raise "Название станции не должно быть пустым" if name.nil?
-    raise "Название станции должно содержать только буквы" if name !~ STATION_FORMAT
+    raise "Название станции не должно быть пустым" if self.name.nil?
+    raise "Название станции должно содержать только буквы" if self.name !~ STATION_FORMAT
   end
 end
