@@ -6,7 +6,7 @@ require_relative 'train_pass.rb'
 require_relative 'wagon.rb'
 require_relative 'wagon_pass.rb'
 require_relative 'wagon_cargo.rb'
-require_relative 'data_in.rb'
+#require_relative 'data_in.rb'
 
 class RailRoad
   attr_reader :route_name
@@ -128,7 +128,7 @@ def create_route
   puts "Создаем последнюю станцию маршрута"
   end_station = create_station
   route_name = "#{start_station.name}-#{end_station.name}"
-  route = Route.new(route_name, start_station.name, end_station.name)
+  route = Route.new(route_name, start_station, end_station)
   @ar_routes << route
   puts "Создан маршрут #{route.route_name}"
 end
@@ -191,7 +191,7 @@ def create_wagon
     puts "Товарный вагон номер #{number} создан."
   else
     puts 'Введите корректный тип вагона (1 - пассажирский, 2 - товарный).'
-    create_wagon
+    create
   end
 end
 

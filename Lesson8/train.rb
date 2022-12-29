@@ -26,14 +26,6 @@ class Train
     register_instance
     validate!
   end
-exit
-  def train_wagons_info(wagons, &block)
-    if block_given?
-     wagons.each { |wagon| yield(wagon) }
-    else
-      wagons
-    end
-  end
 
   def pick_up_speed(value)
     @speed += value
@@ -44,7 +36,15 @@ exit
   end
 
   def hitch_wagon(wagon)
-    wagons.push(wagon) if @speed.zero?
+    if @speed.zero?
+      if self.type == wagon.type
+        wagons.push(wagon)
+      else
+        puts "Поезд и вагоны, должны быть одного типа."
+      end      
+    else
+      puts "Остановите поезд, прежде чем прицеплять вагоны!"
+    end
   end
 
   def unhitch_wagon(wagon)
@@ -98,6 +98,6 @@ exit
 
   def validate!
     raise "Номер не может быть пустым" if number.nil?
-    raise "Неправильный формат. Формат номера поезда ХХХ-ХХ, Х- любая буква или цифра, '-' необязательно." if number.to_s !~ TRAIN_NUMBER_FORMAT
+    raise "Неправильный формат. Формат номера поезда ХХХ-ХХ, Х- любая буква или цифра, '-' необязательно." if number !~ TRAIN_NUMBER_FORMAT
   end
 end
