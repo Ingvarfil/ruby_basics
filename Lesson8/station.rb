@@ -14,11 +14,19 @@ class Station
   end
 
   def initialize(name)
-     @name = name
-     @trains = []
-     @@station_all << self
-     register_instance
-     validate!
+    @name = name
+    @trains = []
+    register_instance
+    validate!
+    @@station_all << self
+  end
+
+  def station_train_info(&block)
+    if block_given?
+    @trains.each { |train| yield(train) }
+    else
+      raise "Блок не передан"
+    end
   end
 
   def add_train(train)
@@ -36,6 +44,7 @@ class Station
   protected
 
   def validate!
+    # raise "Станция такая есть" if self.class.all.find { |station| self.name == station.name }
     raise "Название станции не должно быть пустым" if name.nil?
     raise "Название станции должно содержать только буквы" if name !~ STATION_FORMAT
   end

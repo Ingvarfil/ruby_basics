@@ -9,11 +9,11 @@ class Train
 
   attr_reader :number, :speed, :wagons, :type, :current_station, :previous_station, :next_station, :train_route
 
-  @@trains_all = []
+  @@all_trains = []
   TRAIN_NUMBER_FORMAT = /[a-zа-я0-9]{3}(-?)[a-zа-я0-9]{2}/i
 
   def self.find(number_in)
-    train_find = @@trains_all.find { |train| train.number == number_in }
+    train_find = @@all_trains.find { |train| train.number == number_in }
   end
 
   def initialize(number, type, wagons = 0)
@@ -22,9 +22,17 @@ class Train
     @wagons = []
     @speed = 0
     @train_route = nil
-    @@trains_all << self
+    @@all_trains << self
     register_instance
     validate!
+  end
+
+  def train_wagons_info(&block)
+    if block_given?
+     @wagons.each { |wagon| yield(wagon) }
+    else
+      raise "Блок не передан"
+    end
   end
 
   def pick_up_speed(value)

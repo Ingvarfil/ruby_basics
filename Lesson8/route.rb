@@ -4,10 +4,13 @@ require_relative 'validation.rb'
 class Route
   include InstanceCounter
   include Validation
-
-  STATION_FORMAT = /[a-zа-я]/i
+  @@all_routes = []
 
   attr_reader :start_station, :end_station, :route_name, :stations
+
+  def self.all
+    @@all_routes
+  end
 
   def initialize(route_name, start_station, end_station)
     @start_station = start_station
@@ -16,6 +19,7 @@ class Route
     @route_name = route_name
     register_instance
     validate!
+    @@all_routes << self
   end
 
   def add_station(station)
@@ -31,7 +35,5 @@ class Route
   def validate!
     raise "Название начальной станции не должно быть пустым" if start_station.nil?
     raise "Название конечной станции не должно быть пустым" if end_station.nil?
-    raise "Название начальной станции должно содержать только буквы" if start_station !~ STATION_FORMAT
-    raise "Название конечной станции должно содержать только буквы" if end_station !~ STATION_FORMAT
   end
 end
