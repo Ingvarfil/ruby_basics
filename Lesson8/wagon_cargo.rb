@@ -1,5 +1,5 @@
 class WagonCargo < Wagon
-  attr_reader :occupied_volume, :accessible_volume, :volume
+  attr_reader :occupied_volume, :accessible_volume, :volume, :number
 
   def initialize(number, type = 'товарный')
     @volume = 80

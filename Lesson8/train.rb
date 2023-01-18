@@ -29,7 +29,7 @@ class Train
 
   def train_wagons_info(&block)
     if block_given?
-     @wagons.each { |wagon| yield(wagon) }
+     @wagons.each(&block)
     else
       raise "Блок не передан"
     end
@@ -44,15 +44,7 @@ class Train
   end
 
   def hitch_wagon(wagon)
-    if @speed.zero?
-      if self.type == wagon.type
-        wagons.push(wagon)
-      else
-        puts "Поезд и вагоны, должны быть одного типа."
-      end      
-    else
-      puts "Остановите поезд, прежде чем прицеплять вагоны!"
-    end
+        @wagons.push(wagon) if @speed.zero?    
   end
 
   def unhitch_wagon(wagon)

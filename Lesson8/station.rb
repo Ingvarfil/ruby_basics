@@ -23,7 +23,7 @@ class Station
 
   def station_train_info(&block)
     if block_given?
-    @trains.each { |train| yield(train) }
+    @trains.each(&block)
     else
       raise "Блок не передан"
     end

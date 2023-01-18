@@ -1,5 +1,5 @@
 class WagonPass < Wagon
-  attr_reader :occupied_seats, :empty_seats
+  attr_reader :occupied_seats, :empty_seats, :number
 
   def initialize(number, type = 'пассажирский')
     @all_seats = 54
