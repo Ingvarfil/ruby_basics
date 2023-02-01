@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WagonCargo < Wagon
   attr_reader :occupied_volume, :accessible_volume, :volume, :number
 
@@ -17,6 +19,6 @@ class WagonCargo < Wagon
   protected
 
   def validate!
-    raise "Свободного объема больше нет"  if @volume <= @occupied_volume
+    raise 'Свободного объема больше нет' if @volume <= @occupied_volume
   end
 end

@@ -1,5 +1,7 @@
-require_relative 'instanc_counter.rb'
-require_relative 'validation.rb'
+# frozen_string_literal: true
+
+require_relative 'instanc_counter'
+require_relative 'validation'
 
 class Station
   include InstanceCounter
@@ -7,8 +9,8 @@ class Station
   attr_reader :name, :trains
 
   @@station_all = []
-  STATION_FORMAT = /[a-zа-я]/i
-  
+  STATION_FORMAT = /[a-zа-я]/i.freeze
+
   def self.all
     @@station_all
   end
@@ -22,11 +24,9 @@ class Station
   end
 
   def station_train_info(&block)
-    if block_given?
+    raise 'Блок не передан' unless block_given?
+
     @trains.each(&block)
-    else
-      raise "Блок не передан"
-    end
   end
 
   def add_train(train)
@@ -38,14 +38,13 @@ class Station
   end
 
   def get_list_trains(type)
-    @trains.select {|train| train.number if train.type == type}
+    @trains.select { |train| train.number if train.type == type }
   end
-  
+
   protected
 
   def validate!
-    # raise "Станция такая есть" if self.class.all.find { |station| self.name == station.name }
-    raise "Название станции не должно быть пустым" if name.nil?
-    raise "Название станции должно содержать только буквы" if name !~ STATION_FORMAT
+    raise 'Название станции не должно быть пустым' if name.nil?
+    raise 'Название станции должно содержать только буквы' if name !~ STATION_FORMAT
   end
 end

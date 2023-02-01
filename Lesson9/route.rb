@@ -1,5 +1,7 @@
-require_relative 'instanc_counter.rb'
-require_relative 'validation.rb'
+# frozen_string_literal: true
+
+require_relative 'instanc_counter'
+require_relative 'validation'
 
 class Route
   include InstanceCounter
@@ -33,7 +35,7 @@ class Route
   protected
 
   def validate!
-    raise "Название начальной станции не должно быть пустым" if start_station.nil?
-    raise "Название конечной станции не должно быть пустым" if end_station.nil?
+    raise 'Название начальной станции не должно быть пустым' if start_station.nil?
+    raise 'Название конечной станции не должно быть пустым' if end_station.nil?
   end
 end

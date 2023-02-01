@@ -1,4 +1,6 @@
-require_relative 'manufacturer.rb'
+# frozen_string_literal: true
+
+require_relative 'manufacturer'
 
 class Wagon
   include Manufacturer
@@ -8,5 +10,4 @@ class Wagon
     @number = number
     @type = type
   end
-  
 end

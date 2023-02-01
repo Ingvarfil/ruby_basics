@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WagonPass < Wagon
   attr_reader :occupied_seats, :empty_seats, :number
 
@@ -13,10 +15,10 @@ class WagonPass < Wagon
     @occupied_seats += 1
     @empty_seats -= 1
   end
-  
+
   protected
 
   def validate!
-    raise "Свободных мест больше нет"  if (@all_seats - @occupied_seats).zero?
+    raise 'Свободных мест больше нет' if (@all_seats - @occupied_seats).zero?
   end
 end
