@@ -22,10 +22,10 @@ class Station
 
   def initialize(name)
     @name = name
-    @trains = []
-    register_instance
+    @trains = []  
     validate!
     @@station_all << self
+    register_instance
   end
 
   def station_train_info(&block)

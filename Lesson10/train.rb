@@ -26,9 +26,9 @@ class Train
     @wagons = []
     @speed = 0
     @train_route = nil
-    @@all_trains << self
-    register_instance
     validate!
+    @@all_trains << self
+    register_instance  
   end
 
   def train_wagons_info(&block)

@@ -12,9 +12,9 @@ module Validation
 
   module InstanceMethods
     def validate!
-      self.class.validate_atr.each do |name,type_check, param|
+      self.class.validate_atr.each do |name, type_check, param|
         value = instance_variable_get("@#{name}")
-        case check
+        case type_check
         when :presence then valid_presence(name, value)
         when :type then valid_type(name, value, param)
         when :format then valid_format(name, value, param)

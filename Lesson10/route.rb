@@ -21,10 +21,10 @@ class Route
     @start_station = start_station
     @end_station = end_station
     @stations = [@start_station, @end_station]
-    @route_name = route_name
-    register_instance
+    @route_name = route_name  
     validate!
     @@all_routes << self
+    register_instance
   end
 
   def add_station(station)
