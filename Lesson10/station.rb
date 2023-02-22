@@ -2,15 +2,20 @@
 
 require_relative 'instanc_counter'
 require_relative 'validation'
+require_relative 'accessors'
 
 class Station
   include InstanceCounter
   include Validation
+  include Accessors
   attr_reader :name, :trains
 
-  @@station_all = []
-  STATION_FORMAT = /[a-zа-я]/i.freeze
+  validate :name, :presence
+  validate :name, :type, String
+  validate :name, :format, /[a-zа-я]/i
 
+  @@station_all = []
+ 
   def self.all
     @@station_all
   end
@@ -39,12 +44,5 @@ class Station
 
   def get_list_trains(type)
     @trains.select { |train| train.number if train.type == type }
-  end
-
-  protected
-
-  def validate!
-    raise 'Название станции не должно быть пустым' if name.nil?
-    raise 'Название станции должно содержать только буквы' if name !~ STATION_FORMAT
   end
 end

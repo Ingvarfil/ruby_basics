@@ -10,6 +10,9 @@ class Route
 
   attr_reader :start_station, :end_station, :route_name, :stations
 
+  validate :start_station, :presence
+  validate :end_station, :presence
+
   def self.all
     @@all_routes
   end
@@ -30,12 +33,5 @@ class Route
 
   def delete_station(station)
     @stations.delete(station)
-  end
-
-  protected
-
-  def validate!
-    raise 'Название начальной станции не должно быть пустым' if start_station.nil?
-    raise 'Название конечной станции не должно быть пустым' if end_station.nil?
   end
 end

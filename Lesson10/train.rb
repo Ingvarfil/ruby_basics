@@ -11,8 +11,10 @@ class Train
 
   attr_reader :number, :speed, :wagons, :type, :train_route
 
+  validate :number, :presence
+  validate :number, :format, /[a-zа-я0-9]{3}(-?)[a-zа-я0-9]{2}/i
+
   @@all_trains = []
-  TRAIN_NUMBER_FORMAT = /[a-zа-я0-9]{3}(-?)[a-zа-я0-9]{2}/i.freeze
 
   def self.find(number_in)
     @@all_trains.find { |train| train.number == number_in }
@@ -92,14 +94,5 @@ class Train
       @current_station = previous_station
       @current_station.add_train(self)
     end
-  end
-
-  protected
-
-  def validate!
-    raise 'Номер не может быть пустым' if number.nil?
-    return unless number !~ TRAIN_NUMBER_FORMAT
-
-    raise "Неправильный формат. Формат номера поезда ХХХ-ХХ, Х- любая буква или цифра, '-' необязательно."
   end
 end
